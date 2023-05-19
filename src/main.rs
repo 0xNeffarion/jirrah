@@ -1,4 +1,7 @@
-mod db;
+pub mod db;
 mod models;
+mod ui;
 
-fn main() {}
+fn main() {
+    println!("Welcome to Jirrah!");
+}
