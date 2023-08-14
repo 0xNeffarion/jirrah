@@ -24,13 +24,16 @@ impl Page for HomePage {
     fn draw_page(&self) -> Result<()> {
         let epics = self.db.read_db()?.epics;
         for (key, value) in epics.iter().sorted_by(|a, b| a.0.cmp(b.0)) {
+            let epic_status = value.status.to_string();
+            let key_string = key.to_string();
+
             println!("----------------------------- EPICS -----------------------------");
             println!("     id     |               name               |      status      ");
             println!(
-                "{0: <11} | {1: <32} | {2: <19}",
-                key,
-                page_helpers::get_column_string(&value.name, 34),
-                value.status
+                "{} | {} | {}",
+                page_helpers::get_column_string(&key_string, 11),
+                page_helpers::get_column_string(&value.name, 32),
+                page_helpers::get_column_string(&epic_status, 16)
             );
             println!();
             println!();

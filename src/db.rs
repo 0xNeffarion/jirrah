@@ -9,9 +9,11 @@ pub struct JiraDatabase {
 }
 
 impl JiraDatabase {
-    pub fn new(file_path: String) -> Self {
+    pub fn new(file_path: impl AsRef<str>) -> Self {
         Self {
-            database: Box::new(JSONFileDatabase { file_path }),
+            database: Box::new(JSONFileDatabase { 
+                file_path: file_path.as_ref().to_owned(),
+            }),
         }
     }
 

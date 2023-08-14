@@ -6,17 +6,20 @@ pub fn get_column_string(text: &str, width: usize) -> String {
             return "..."[0..width].to_owned();
         }
 
-        return text.truncate_ellipse(width - 3).to_string();
-    } else if text.len() == width {
-        text.to_string()
+        text.truncate_ellipse(width - 3).to_string()
     } else {
-        let mut col = text.to_owned();
+        match text.len() == width {
+            true => text.to_string(),
+            false => {
+                let mut col = text.to_owned();
 
-        for _ in 0..(width - text.len()) {
-            col.push(' ');
+                for _ in 0..(width - text.len()) {
+                    col.push(' ');
+                }
+
+                col
+            }
         }
-
-        col
     }
 }
 

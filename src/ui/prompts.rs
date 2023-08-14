@@ -26,9 +26,9 @@ impl Prompts {
 fn create_epic_prompt() -> Epic {
     println!("----------------------------");
     println!("Epic Name:");
-    let name = get_user_input();
+    let name = get_user_input().trim().to_owned();
     println!("Epic Description:");
-    let description = get_user_input();
+    let description = get_user_input().trim().to_owned();
 
     Epic {
         name,
@@ -41,9 +41,9 @@ fn create_epic_prompt() -> Epic {
 fn create_story_prompt() -> Story {
     println!("----------------------------");
     println!("Story Name:");
-    let name = get_user_input();
+    let name = get_user_input().trim().to_owned();
     println!("Story Description:");
-    let description = get_user_input();
+    let description = get_user_input().trim().to_owned();
 
     Story {
         name,
@@ -55,13 +55,13 @@ fn create_story_prompt() -> Story {
 fn delete_epic_prompt() -> bool {
     println!("----------------------------");
     println!("Are you sure you want to delete this epic? All stories in this epic will also be deleted [Y/n]:");
-    get_user_input() == "Y"
+    get_user_input().trim().to_ascii_uppercase() == "Y"
 }
 
 fn delete_story_prompt() -> bool {
     println!("----------------------------");
     println!("Are you sure you want to delete this story? [Y/n]:");
-    get_user_input() == "Y"
+    get_user_input().trim().to_ascii_uppercase() == "Y"
 }
 
 fn update_status_prompt() -> Option<Status> {
