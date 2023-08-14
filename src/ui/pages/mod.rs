@@ -3,6 +3,7 @@ use std::rc::Rc;
 use anyhow::anyhow;
 use anyhow::Result;
 use itertools::Itertools;
+use std::any::Any;
 
 use crate::db::JiraDatabase;
 use crate::models::Action;
@@ -12,6 +13,7 @@ mod page_helpers;
 pub trait Page {
     fn draw_page(&self) -> Result<()>;
     fn handle_input(&self, input: &str) -> Result<Option<Action>>;
+    fn as_any(&self) -> &dyn Any;
 }
 
 pub struct HomePage {
@@ -36,6 +38,10 @@ impl Page for HomePage {
         println!("[q] quit | [c] create epic | [:id:] navigate to epic");
 
         Ok(())
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
@@ -100,6 +106,10 @@ impl Page for EpicDetail {
         Ok(())
     }
 
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
         match input {
             "p" => Ok(Some(Action::NavigateToPreviousPage)),
@@ -161,6 +171,10 @@ impl Page for StoryDetail {
         Ok(())
     }
 
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
         match input {
             "p" => Ok(Some(Action::NavigateToPreviousPage)),
@@ -193,7 +207,7 @@ mod tests {
             });
 
             let page = HomePage { db };
-            assert_eq!(page.draw_page().is_ok(), true);
+            assert!(page.draw_page().is_ok());
         }
 
         #[test]
@@ -203,7 +217,7 @@ mod tests {
             });
 
             let page = HomePage { db };
-            assert_eq!(page.handle_input("").is_ok(), true);
+            assert!(page.handle_input("").is_ok());
         }
 
         #[test]
@@ -258,7 +272,7 @@ mod tests {
                 .unwrap();
 
             let page = EpicDetail { epic_id, db };
-            assert_eq!(page.draw_page().is_ok(), true);
+            assert!(page.draw_page().is_ok());
         }
 
         #[test]
@@ -271,7 +285,7 @@ mod tests {
                 .unwrap();
 
             let page = EpicDetail { epic_id, db };
-            assert_eq!(page.handle_input("").is_ok(), true);
+            assert!(page.handle_input("").is_ok());
         }
 
         #[test]
@@ -281,7 +295,7 @@ mod tests {
             });
 
             let page = EpicDetail { epic_id: 999, db };
-            assert_eq!(page.draw_page().is_err(), true);
+            assert!(page.draw_page().is_err());
         }
 
         #[test]
@@ -365,7 +379,7 @@ mod tests {
                 story_id,
                 db,
             };
-            assert_eq!(page.draw_page().is_ok(), true);
+            assert!(page.draw_page().is_ok());
         }
 
         #[test]
@@ -386,7 +400,7 @@ mod tests {
                 story_id,
                 db,
             };
-            assert_eq!(page.handle_input("").is_ok(), true);
+            assert!(page.handle_input("").is_ok());
         }
 
         #[test]
@@ -407,7 +421,7 @@ mod tests {
                 story_id: 999,
                 db,
             };
-            assert_eq!(page.draw_page().is_err(), true);
+            assert!(page.draw_page().is_err());
         }
 
         #[test]
